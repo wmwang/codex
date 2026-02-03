@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>VB Wiki 控制台</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="header">
+      <h1>VB Wiki 控制台</h1>
+      <p>掃描專案、查看模組、精準讀函式，再交給 LLM 生成 Wiki。</p>
+    </header>
+    <main class="container">
+      <section class="card">
+        <h2>專案列表</h2>
+        <div class="row">
+          <input id="rootDir" type="text" placeholder="Root directory (default .)" />
+          <button id="loadProjects">載入專案</button>
+        </div>
+        <ul id="projects"></ul>
+      </section>
+
+      <section class="card">
+        <h2>檔案與函式結構</h2>
+        <div class="row">
+          <input id="vbpPath" type="text" placeholder="VBP path" />
+          <button id="loadFiles">載入檔案</button>
+        </div>
+        <div class="row">
+          <input id="filePath" type="text" placeholder="File path" />
+          <button id="loadStructure">讀取結構</button>
+        </div>
+        <ul id="fileStructure"></ul>
+      </section>
+
+      <section class="card">
+        <h2>讀取函式內容</h2>
+        <div class="row">
+          <input id="functionFilePath" type="text" placeholder="File path" />
+          <input id="functionName" type="text" placeholder="Function name" />
+          <button id="loadFunction">讀取函式</button>
+        </div>
+        <pre id="functionCode"></pre>
+      </section>
+
+      <section class="card">
+        <h2>搜尋與 LLM 生成</h2>
+        <div class="row">
+          <input id="searchKeyword" type="text" placeholder="Keyword" />
+          <button id="runSearch">搜尋</button>
+        </div>
+        <ul id="searchResults"></ul>
+        <textarea id="prompt" rows="6" placeholder="將摘要或需求貼上，送到 LLM"></textarea>
+        <button id="generate">呼叫 LLM 生成</button>
+        <pre id="llmOutput"></pre>
+      </section>
+    </main>
+    <script src="./app.js"></script>
+  </body>
+</html>
