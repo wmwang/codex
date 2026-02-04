@@ -128,3 +128,8 @@
 
 已新增 `.bas` 模組解析器（regex-based）與 CLI，可抽出 `Sub/Function` 與 `Call` 關係。
 後續可在 AST 整合完成後替換為 AST-based 抽取。
+
+## Graph / Mermaid 進度
+
+- 已加入 `graph` 模組，提供 GraphModel 與 Mermaid 渲染器。
+- 全專案分析 CLI 會輸出專案級 Mermaid graph。 

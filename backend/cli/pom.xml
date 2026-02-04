@@ -22,5 +22,11 @@
       <artifactId>extractor</artifactId>
       <version>${project.version}</version>
     </dependency>
+    <dependency>
+      <groupId>com.codex</groupId>
+      <artifactId>graph</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
   </dependencies>
 </project>

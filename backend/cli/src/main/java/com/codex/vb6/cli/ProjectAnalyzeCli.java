@@ -8,6 +8,9 @@ import com.codex.vb6.extractor.FrmEvent;
 import com.codex.vb6.extractor.ProjectAnalysis;
 import com.codex.vb6.extractor.ProjectAnalyzer;
 import com.codex.vb6.extractor.ProjectSummary;
+import com.codex.vb6.graph.GraphBuilder;
+import com.codex.vb6.graph.GraphModel;
+import com.codex.vb6.graph.MermaidRenderer;
 import com.codex.vb6.parser.VbpEntry;
 
 import java.io.IOException;
@@ -29,8 +32,9 @@ public final class ProjectAnalyzeCli {
         Files.createDirectories(outputDir);
 
         ProjectAnalysis analysis = ProjectAnalyzer.analyze(rootDir);
+        GraphModel graph = GraphBuilder.build(analysis);
         writeFile(outputDir.resolve("analysis.json"), toJson(analysis));
-        writeFile(outputDir.resolve("report.md"), toMarkdown(analysis));
+        writeFile(outputDir.resolve("report.md"), toMarkdown(analysis, graph));
 
         System.out.println("Wrote analysis.json and report.md to " + outputDir.toAbsolutePath());
     }
@@ -114,7 +118,7 @@ public final class ProjectAnalyzeCli {
                 "}";
     }
 
-    private static String toMarkdown(ProjectAnalysis analysis) {
+    private static String toMarkdown(ProjectAnalysis analysis, GraphModel graph) {
         StringBuilder builder = new StringBuilder();
         builder.append("# VB6 專案分析報告\n\n");
         builder.append("共掃描 ").append(analysis.projects().size()).append(" 個 .vbp 專案。\n\n");
@@ -167,25 +171,36 @@ public final class ProjectAnalyzeCli {
             }
 
             builder.append("### Mermaid 呼叫圖（Form Events）\n\n");
-            builder.append("```mermaid\n");
-            builder.append("graph TD\n");
-            for (FrmAnalysis form : project.forms()) {
-                for (FrmEvent event : form.events()) {
-                    String eventNode = sanitize(form.formName()) + "_" + sanitize(event.name());
-                    builder.append("  ").append(eventNode).append("[\"")
-                            .append(nullSafe(event.name(), "event"))
-                            .append("\"]\n");
-                    for (FrmCall call : event.calls()) {
-                        String targetNode = sanitize(call.target());
-                        builder.append("  ").append(eventNode).append(" --> ")
-                                .append(targetNode).append("[\"")
-                                .append(call.target()).append("\"]\n");
-                    }
-                }
-            }
-            builder.append("```\n\n");
+            builder.append(renderFormMermaid(project));
+            builder.append("\n");
         }
 
+        builder.append("## 全專案 Mermaid Graph\n\n");
+        builder.append(MermaidRenderer.render(graph));
+        builder.append("\n");
+
+        return builder.toString();
+    }
+
+    private static String renderFormMermaid(ProjectSummary project) {
+        StringBuilder builder = new StringBuilder();
+        builder.append("```mermaid\n");
+        builder.append("graph TD\n");
+        for (FrmAnalysis form : project.forms()) {
+            for (FrmEvent event : form.events()) {
+                String eventNode = sanitize(form.formName()) + "_" + sanitize(event.name());
+                builder.append("  ").append(eventNode).append("[\"")
+                        .append(nullSafe(event.name(), "event"))
+                        .append("\"]\n");
+                for (FrmCall call : event.calls()) {
+                    String targetNode = sanitize(call.target());
+                    builder.append("  ").append(eventNode).append(" --> ")
+                            .append(targetNode).append("[\"")
+                            .append(call.target()).append("\"]\n");
+                }
+            }
+        }
+        builder.append("```\n");
         return builder.toString();
     }
 

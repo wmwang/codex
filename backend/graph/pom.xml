@@ -10,4 +10,12 @@
   </parent>
 
   <artifactId>graph</artifactId>
+
+  <dependencies>
+    <dependency>
+      <groupId>com.codex</groupId>
+      <artifactId>extractor</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+  </dependencies>
 </project>
