@@ -102,6 +102,17 @@ java -cp backend/cli/target/cli-0.1.0-SNAPSHOT.jar \
 }
 ```
 
+### 4.4 全專案分析（VBP + FRM + BAS）
+
+```bash
+java -cp backend/cli/target/cli-0.1.0-SNAPSHOT.jar \
+  com.codex.vb6.cli.ProjectAnalyzeCli /path/to/project/root /path/to/output
+```
+
+輸出：
+- `analysis.json`：完整索引與解析結果
+- `report.md`：Markdown 報告與 Mermaid 呼叫圖
+
 ## 5. 常見問題
 
 ### 5.1 為什麼沒有 AST 解析？
